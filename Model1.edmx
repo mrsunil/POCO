@@ -1,0 +1,606 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ApprovalFlowModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApprovalRules">
+          <Key>
+            <PropertyRef Name="ApprovalRuleId" />
+          </Key>
+          <Property Name="ApprovalRuleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HierarchyId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Approve">
+          <Key>
+            <PropertyRef Name="ApproveId" />
+          </Key>
+          <Property Name="ApproveId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HierarchyId" Type="int" Nullable="false" />
+          <Property Name="Dfr" Type="int" Nullable="false" />
+          <Property Name="Lcfo" Type="int" Nullable="false" />
+          <Property Name="IsEffective" Type="bit" Nullable="false" />
+          <Property Name="EfffectiveDate" Type="datetime" Nullable="false" />
+          <Property Name="ExpirationDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApproveHistory">
+          <Key>
+            <PropertyRef Name="ApproveHistoryId" />
+          </Key>
+          <Property Name="ApproveHistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApproveId" Type="int" />
+          <Property Name="PreviousDfr" Type="int" />
+          <Property Name="PreviousLcfo" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nTic" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="EmailId" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Division" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IsDFR" Type="bit" Nullable="false" />
+          <Property Name="IsLCFO" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ntic" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ResponsibilityCodeHierarchy">
+          <Key>
+            <PropertyRef Name="HierarchyId" />
+          </Key>
+          <Property Name="HierarchyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResponsibilityCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ParentCode" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SecurityContact">
+          <Key>
+            <PropertyRef Name="SecurityContactId" />
+          </Key>
+          <Property Name="SecurityContactId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nTic" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmailId" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Division" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Department" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SecurityContactResponsibilityCode">
+          <Key>
+            <PropertyRef Name="SecurityContactResponsibilityCodeId" />
+          </Key>
+          <Property Name="SecurityContactResponsibilityCodeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SecurityContactId" Type="int" Nullable="false" />
+          <Property Name="HierarchyId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Approve_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Approve" Type="Self.Approve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Approve">
+              <PropertyRef Name="Dfr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Approve_Employee1">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Approve" Type="Self.Approve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Approve">
+              <PropertyRef Name="Lcfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Approve_ResponsibilityCodeHierarchy">
+          <End Role="ResponsibilityCodeHierarchy" Type="Self.ResponsibilityCodeHierarchy" Multiplicity="1" />
+          <End Role="Approve" Type="Self.Approve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponsibilityCodeHierarchy">
+              <PropertyRef Name="HierarchyId" />
+            </Principal>
+            <Dependent Role="Approve">
+              <PropertyRef Name="HierarchyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproveHistory_Approve">
+          <End Role="Approve" Type="Self.Approve" Multiplicity="0..1" />
+          <End Role="ApproveHistory" Type="Self.ApproveHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approve">
+              <PropertyRef Name="ApproveId" />
+            </Principal>
+            <Dependent Role="ApproveHistory">
+              <PropertyRef Name="ApproveId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproveHistory_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="ApproveHistory" Type="Self.ApproveHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ApproveHistory">
+              <PropertyRef Name="PreviousDfr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproveHistory_Employee1">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="ApproveHistory" Type="Self.ApproveHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ApproveHistory">
+              <PropertyRef Name="PreviousLcfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy">
+          <End Role="ResponsibilityCodeHierarchy" Type="Self.ResponsibilityCodeHierarchy" Multiplicity="1" />
+          <End Role="SecurityContactResponsibilityCode" Type="Self.SecurityContactResponsibilityCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponsibilityCodeHierarchy">
+              <PropertyRef Name="HierarchyId" />
+            </Principal>
+            <Dependent Role="SecurityContactResponsibilityCode">
+              <PropertyRef Name="HierarchyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SecurityContactResponsibilityCode_SecurityContact">
+          <End Role="SecurityContact" Type="Self.SecurityContact" Multiplicity="1" />
+          <End Role="SecurityContactResponsibilityCode" Type="Self.SecurityContactResponsibilityCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SecurityContact">
+              <PropertyRef Name="SecurityContactId" />
+            </Principal>
+            <Dependent Role="SecurityContactResponsibilityCode">
+              <PropertyRef Name="SecurityContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ApprovalFlowModelStoreContainer">
+          <EntitySet Name="ApprovalRules" EntityType="Self.ApprovalRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Approve" EntityType="Self.Approve" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApproveHistory" EntityType="Self.ApproveHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResponsibilityCodeHierarchy" EntityType="Self.ResponsibilityCodeHierarchy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SecurityContact" EntityType="Self.SecurityContact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SecurityContactResponsibilityCode" EntityType="Self.SecurityContactResponsibilityCode" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Approve_Employee" Association="Self.FK_Approve_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Approve" EntitySet="Approve" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Approve_Employee1" Association="Self.FK_Approve_Employee1">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Approve" EntitySet="Approve" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Approve_ResponsibilityCodeHierarchy" Association="Self.FK_Approve_ResponsibilityCodeHierarchy">
+            <End Role="ResponsibilityCodeHierarchy" EntitySet="ResponsibilityCodeHierarchy" />
+            <End Role="Approve" EntitySet="Approve" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproveHistory_Approve" Association="Self.FK_ApproveHistory_Approve">
+            <End Role="Approve" EntitySet="Approve" />
+            <End Role="ApproveHistory" EntitySet="ApproveHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproveHistory_Employee" Association="Self.FK_ApproveHistory_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="ApproveHistory" EntitySet="ApproveHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproveHistory_Employee1" Association="Self.FK_ApproveHistory_Employee1">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="ApproveHistory" EntitySet="ApproveHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy" Association="Self.FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy">
+            <End Role="ResponsibilityCodeHierarchy" EntitySet="ResponsibilityCodeHierarchy" />
+            <End Role="SecurityContactResponsibilityCode" EntitySet="SecurityContactResponsibilityCode" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SecurityContactResponsibilityCode_SecurityContact" Association="Self.FK_SecurityContactResponsibilityCode_SecurityContact">
+            <End Role="SecurityContact" EntitySet="SecurityContact" />
+            <End Role="SecurityContactResponsibilityCode" EntitySet="SecurityContactResponsibilityCode" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ApprovalFlowModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ApprovalRule">
+          <Key>
+            <PropertyRef Name="ApprovalRuleId" />
+          </Key>
+          <Property Name="ApprovalRuleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HierarchyId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Approve">
+          <Key>
+            <PropertyRef Name="ApproveId" />
+          </Key>
+          <Property Name="ApproveId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HierarchyId" Type="Int32" Nullable="false" />
+          <Property Name="Dfr" Type="Int32" Nullable="false" />
+          <Property Name="Lcfo" Type="Int32" Nullable="false" />
+          <Property Name="IsEffective" Type="Boolean" Nullable="false" />
+          <Property Name="EfffectiveDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Approve_Employee" FromRole="Approve" ToRole="Employee" />
+          <NavigationProperty Name="Employee1" Relationship="Self.FK_Approve_Employee1" FromRole="Approve" ToRole="Employee" />
+          <NavigationProperty Name="ResponsibilityCodeHierarchy" Relationship="Self.FK_Approve_ResponsibilityCodeHierarchy" FromRole="Approve" ToRole="ResponsibilityCodeHierarchy" />
+          <NavigationProperty Name="ApproveHistories" Relationship="Self.FK_ApproveHistory_Approve" FromRole="Approve" ToRole="ApproveHistory" />
+        </EntityType>
+        <EntityType Name="ApproveHistory">
+          <Key>
+            <PropertyRef Name="ApproveHistoryId" />
+          </Key>
+          <Property Name="ApproveHistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApproveId" Type="Int32" />
+          <Property Name="PreviousDfr" Type="Int32" />
+          <Property Name="PreviousLcfo" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Approve" Relationship="Self.FK_ApproveHistory_Approve" FromRole="ApproveHistory" ToRole="Approve" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_ApproveHistory_Employee" FromRole="ApproveHistory" ToRole="Employee" />
+          <NavigationProperty Name="Employee1" Relationship="Self.FK_ApproveHistory_Employee1" FromRole="ApproveHistory" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nTic" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmailId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Division" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsDFR" Type="Boolean" Nullable="false" />
+          <Property Name="IsLCFO" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Approves" Relationship="Self.FK_Approve_Employee" FromRole="Employee" ToRole="Approve" />
+          <NavigationProperty Name="Approves1" Relationship="Self.FK_Approve_Employee1" FromRole="Employee" ToRole="Approve" />
+          <NavigationProperty Name="ApproveHistories" Relationship="Self.FK_ApproveHistory_Employee" FromRole="Employee" ToRole="ApproveHistory" />
+          <NavigationProperty Name="ApproveHistories1" Relationship="Self.FK_ApproveHistory_Employee1" FromRole="Employee" ToRole="ApproveHistory" />
+        </EntityType>
+        <EntityType Name="Employee1">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ntic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ResponsibilityCodeHierarchy">
+          <Key>
+            <PropertyRef Name="HierarchyId" />
+          </Key>
+          <Property Name="HierarchyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResponsibilityCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ParentCode" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Approves" Relationship="Self.FK_Approve_ResponsibilityCodeHierarchy" FromRole="ResponsibilityCodeHierarchy" ToRole="Approve" />
+          <NavigationProperty Name="SecurityContactResponsibilityCodes" Relationship="Self.FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy" FromRole="ResponsibilityCodeHierarchy" ToRole="SecurityContactResponsibilityCode" />
+        </EntityType>
+        <EntityType Name="SecurityContact">
+          <Key>
+            <PropertyRef Name="SecurityContactId" />
+          </Key>
+          <Property Name="SecurityContactId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nTic" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmailId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Division" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Department" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="SecurityContactResponsibilityCodes" Relationship="Self.FK_SecurityContactResponsibilityCode_SecurityContact" FromRole="SecurityContact" ToRole="SecurityContactResponsibilityCode" />
+        </EntityType>
+        <EntityType Name="SecurityContactResponsibilityCode">
+          <Key>
+            <PropertyRef Name="SecurityContactResponsibilityCodeId" />
+          </Key>
+          <Property Name="SecurityContactResponsibilityCodeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SecurityContactId" Type="Int32" Nullable="false" />
+          <Property Name="HierarchyId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ResponsibilityCodeHierarchy" Relationship="Self.FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy" FromRole="SecurityContactResponsibilityCode" ToRole="ResponsibilityCodeHierarchy" />
+          <NavigationProperty Name="SecurityContact" Relationship="Self.FK_SecurityContactResponsibilityCode_SecurityContact" FromRole="SecurityContactResponsibilityCode" ToRole="SecurityContact" />
+        </EntityType>
+        <Association Name="FK_Approve_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Approve" Type="Self.Approve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Approve">
+              <PropertyRef Name="Dfr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Approve_Employee1">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Approve" Type="Self.Approve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Approve">
+              <PropertyRef Name="Lcfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Approve_ResponsibilityCodeHierarchy">
+          <End Role="ResponsibilityCodeHierarchy" Type="Self.ResponsibilityCodeHierarchy" Multiplicity="1" />
+          <End Role="Approve" Type="Self.Approve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponsibilityCodeHierarchy">
+              <PropertyRef Name="HierarchyId" />
+            </Principal>
+            <Dependent Role="Approve">
+              <PropertyRef Name="HierarchyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproveHistory_Approve">
+          <End Role="Approve" Type="Self.Approve" Multiplicity="0..1" />
+          <End Role="ApproveHistory" Type="Self.ApproveHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approve">
+              <PropertyRef Name="ApproveId" />
+            </Principal>
+            <Dependent Role="ApproveHistory">
+              <PropertyRef Name="ApproveId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproveHistory_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="ApproveHistory" Type="Self.ApproveHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ApproveHistory">
+              <PropertyRef Name="PreviousDfr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproveHistory_Employee1">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="ApproveHistory" Type="Self.ApproveHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ApproveHistory">
+              <PropertyRef Name="PreviousLcfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy">
+          <End Role="ResponsibilityCodeHierarchy" Type="Self.ResponsibilityCodeHierarchy" Multiplicity="1" />
+          <End Role="SecurityContactResponsibilityCode" Type="Self.SecurityContactResponsibilityCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResponsibilityCodeHierarchy">
+              <PropertyRef Name="HierarchyId" />
+            </Principal>
+            <Dependent Role="SecurityContactResponsibilityCode">
+              <PropertyRef Name="HierarchyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SecurityContactResponsibilityCode_SecurityContact">
+          <End Role="SecurityContact" Type="Self.SecurityContact" Multiplicity="1" />
+          <End Role="SecurityContactResponsibilityCode" Type="Self.SecurityContactResponsibilityCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SecurityContact">
+              <PropertyRef Name="SecurityContactId" />
+            </Principal>
+            <Dependent Role="SecurityContactResponsibilityCode">
+              <PropertyRef Name="SecurityContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ApprovalFlowEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ApprovalRules" EntityType="Self.ApprovalRule" />
+          <EntitySet Name="Approves" EntityType="Self.Approve" />
+          <EntitySet Name="ApproveHistories" EntityType="Self.ApproveHistory" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Employees1" EntityType="Self.Employee1" />
+          <EntitySet Name="ResponsibilityCodeHierarchies" EntityType="Self.ResponsibilityCodeHierarchy" />
+          <EntitySet Name="SecurityContacts" EntityType="Self.SecurityContact" />
+          <EntitySet Name="SecurityContactResponsibilityCodes" EntityType="Self.SecurityContactResponsibilityCode" />
+          <AssociationSet Name="FK_Approve_Employee" Association="Self.FK_Approve_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Approve" EntitySet="Approves" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Approve_Employee1" Association="Self.FK_Approve_Employee1">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Approve" EntitySet="Approves" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Approve_ResponsibilityCodeHierarchy" Association="Self.FK_Approve_ResponsibilityCodeHierarchy">
+            <End Role="ResponsibilityCodeHierarchy" EntitySet="ResponsibilityCodeHierarchies" />
+            <End Role="Approve" EntitySet="Approves" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproveHistory_Approve" Association="Self.FK_ApproveHistory_Approve">
+            <End Role="Approve" EntitySet="Approves" />
+            <End Role="ApproveHistory" EntitySet="ApproveHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproveHistory_Employee" Association="Self.FK_ApproveHistory_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="ApproveHistory" EntitySet="ApproveHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproveHistory_Employee1" Association="Self.FK_ApproveHistory_Employee1">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="ApproveHistory" EntitySet="ApproveHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy" Association="Self.FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy">
+            <End Role="ResponsibilityCodeHierarchy" EntitySet="ResponsibilityCodeHierarchies" />
+            <End Role="SecurityContactResponsibilityCode" EntitySet="SecurityContactResponsibilityCodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SecurityContactResponsibilityCode_SecurityContact" Association="Self.FK_SecurityContactResponsibilityCode_SecurityContact">
+            <End Role="SecurityContact" EntitySet="SecurityContacts" />
+            <End Role="SecurityContactResponsibilityCode" EntitySet="SecurityContactResponsibilityCodes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ApprovalFlowModelStoreContainer" CdmEntityContainer="ApprovalFlowEntities">
+          <EntitySetMapping Name="ApprovalRules">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.ApprovalRule">
+              <MappingFragment StoreEntitySet="ApprovalRules">
+                <ScalarProperty Name="ApprovalRuleId" ColumnName="ApprovalRuleId" />
+                <ScalarProperty Name="HierarchyId" ColumnName="HierarchyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Approves">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.Approve">
+              <MappingFragment StoreEntitySet="Approve">
+                <ScalarProperty Name="ApproveId" ColumnName="ApproveId" />
+                <ScalarProperty Name="HierarchyId" ColumnName="HierarchyId" />
+                <ScalarProperty Name="Dfr" ColumnName="Dfr" />
+                <ScalarProperty Name="Lcfo" ColumnName="Lcfo" />
+                <ScalarProperty Name="IsEffective" ColumnName="IsEffective" />
+                <ScalarProperty Name="EfffectiveDate" ColumnName="EfffectiveDate" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApproveHistories">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.ApproveHistory">
+              <MappingFragment StoreEntitySet="ApproveHistory">
+                <ScalarProperty Name="ApproveHistoryId" ColumnName="ApproveHistoryId" />
+                <ScalarProperty Name="ApproveId" ColumnName="ApproveId" />
+                <ScalarProperty Name="PreviousDfr" ColumnName="PreviousDfr" />
+                <ScalarProperty Name="PreviousLcfo" ColumnName="PreviousLcfo" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="nTic" ColumnName="nTic" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="IsDFR" ColumnName="IsDFR" />
+                <ScalarProperty Name="IsLCFO" ColumnName="IsLCFO" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees1">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.Employee1">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Ntic" ColumnName="Ntic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResponsibilityCodeHierarchies">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.ResponsibilityCodeHierarchy">
+              <MappingFragment StoreEntitySet="ResponsibilityCodeHierarchy">
+                <ScalarProperty Name="HierarchyId" ColumnName="HierarchyId" />
+                <ScalarProperty Name="ResponsibilityCode" ColumnName="ResponsibilityCode" />
+                <ScalarProperty Name="ParentCode" ColumnName="ParentCode" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SecurityContacts">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.SecurityContact">
+              <MappingFragment StoreEntitySet="SecurityContact">
+                <ScalarProperty Name="SecurityContactId" ColumnName="SecurityContactId" />
+                <ScalarProperty Name="nTic" ColumnName="nTic" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SecurityContactResponsibilityCodes">
+            <EntityTypeMapping TypeName="ApprovalFlowModel.SecurityContactResponsibilityCode">
+              <MappingFragment StoreEntitySet="SecurityContactResponsibilityCode">
+                <ScalarProperty Name="SecurityContactResponsibilityCodeId" ColumnName="SecurityContactResponsibilityCodeId" />
+                <ScalarProperty Name="SecurityContactId" ColumnName="SecurityContactId" />
+                <ScalarProperty Name="HierarchyId" ColumnName="HierarchyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

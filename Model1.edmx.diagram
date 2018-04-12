@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f62961461c414fb5b91de2da42f8e335" Name="Diagram1">
+        <EntityTypeShape EntityType="ApprovalFlowModel.ApprovalRule" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApprovalFlowModel.Approve" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApprovalFlowModel.ApproveHistory" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApprovalFlowModel.Employee" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApprovalFlowModel.ResponsibilityCodeHierarchy" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApprovalFlowModel.SecurityContact" Width="1.5" PointX="0.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApprovalFlowModel.SecurityContactResponsibilityCode" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_Approve_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_Approve_Employee1" ManuallyRouted="false" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_Approve_ResponsibilityCodeHierarchy" ManuallyRouted="false" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_ApproveHistory_Approve" ManuallyRouted="false" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_ApproveHistory_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_ApproveHistory_Employee1" ManuallyRouted="false" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_SecurityContactResponsibilityCode_ResponsibilityCodeHierarchy" ManuallyRouted="false" />
+        <AssociationConnector Association="ApprovalFlowModel.FK_SecurityContactResponsibilityCode_SecurityContact" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
